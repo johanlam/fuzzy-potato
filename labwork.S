@@ -126,6 +126,7 @@ sb $t0, 5($s0)
 j time2return
 nop 
 
+.global enable_interrupt
 enable_interrupt:
 ei
 jr $ra

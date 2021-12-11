@@ -29,11 +29,12 @@ void user_isr(void) {
     IFS(0) = 0;  // reset flag
     timeoutcount++;
     if (timeoutcount == 10) {
-      time2string(textstring, mytime);
-      display_string(3, textstring);
-      display_update();
-      tick(&mytime);
-
+      //   time2string(textstring, mytime);
+      //   display_string(3, textstring);
+      //   display_update();
+      //   tick(&mytime);
+      // display_testing(2);
+      //   display_image(96, icon);
       timeoutcount = 0;
     }
   }
@@ -41,6 +42,7 @@ void user_isr(void) {
 
 /* Lab-specific initialization goes here */
 void labinit(void) {
+  display_init();
   volatile int* trise = (volatile int*)0xbf886100;
   *trise = *trise & 0xff00;  // sets bits 0:7 as outputs
 
@@ -61,8 +63,17 @@ void labinit(void) {
 }
 
 /* This function is called repetitively from the main program */
-void labwork(void) {
-  prime = nextprime(prime);
-  display_string(0, itoaconv(prime));
-  display_update();
+void labwork(void) {  // game loop
+                      //   toggle_pixel(40, 3, 1);
+                      //   display_image2(0, screen);
+
+  toggle_pixel(64, 16, 1);
+  int initY = 16;
+
+  while (initY < 33) {
+    initY++;
+    toggle_pixel(64, initY, 1);
+    display_clear();
+  }
+  display_image2(0, screen);
 }
