@@ -90,6 +90,12 @@ const uint8_t const icon[] = {
     184, 69,  186, 69,  254, 80,  175, 217,
 };
 
+const uint8_t const birdIcon[] = {
+    7,
+    15,
+    7,
+};
+
 uint8_t screen[512];  // current frame
 
 uint8_t nextScreen[512];  // the next frame to display. This frame should write

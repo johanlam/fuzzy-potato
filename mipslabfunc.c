@@ -216,6 +216,13 @@ void display_update2(const uint8_t *byteBuffer) {
   }
 }
 
+void screen_clear(uint8_t *screenBuffer) {
+  int i;
+  for (i = 0; i < 512; i++) {
+    screenBuffer[i] = 0;
+  }
+}
+
 void display_clear(void) {
   int ipag;
   int icol;

@@ -40,7 +40,7 @@
 	PUSH $s1 # s1 = ms
 
 	move $s1, $a0			
-	li $s1, 1000		# change argument value from $a0
+	li $s1, 5		# change argument value from $a0, default 1000, optimal 50
 	li $s0, 4711		# change i = 4711 variable in for loop
 	
 while: 	beqz $s1, done

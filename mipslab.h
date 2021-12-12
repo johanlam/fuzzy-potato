@@ -17,6 +17,7 @@ void display_clear();
 void display_testing(int n);
 uint8_t spi_send_recv(uint8_t data);
 void toggle_pixel(int x, int y, int bool);
+void screen_clear(uint8_t *screen);
 
 /* Declare lab-related functions from mipslabfunc.c */
 char *itoaconv(int num);
@@ -50,6 +51,8 @@ extern char textbuffer[4][16];
 extern uint8_t screen[512];
 // Declare next screen frame
 extern uint8_t nextScreen[512];
+// Declare bird
+extern const uint8_t const birdIcon[12];
 
 /* Declare functions written by students.
    Note: Since we declare these functions here,

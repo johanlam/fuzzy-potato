@@ -13,7 +13,9 @@
 #include <pic32mx.h> /* Declarations of system-specific addresses etc */
 #include <stdint.h>  /* Declarations of uint_32 and the like */
 
+#include "gameObjects.h"
 #include "mipslab.h" /* Declatations for these labs */
+#include "structs.h"
 
 int prime = 1234567;
 
@@ -28,13 +30,23 @@ void user_isr(void) {
       0x100) {   // verify flag is high, 0x100 = 1000 0000 and we want bit 8
     IFS(0) = 0;  // reset flag
     timeoutcount++;
-    if (timeoutcount == 10) {
-      //   time2string(textstring, mytime);
-      //   display_string(3, textstring);
-      //   display_update();
-      //   tick(&mytime);
-      // display_testing(2);
-      //   display_image(96, icon);
+    if (timeoutcount == 2) {
+      //   int initY = 16;
+
+      //   int bool = 0;
+      //   while (!bool) {
+      //     screen_clear(screen);
+
+      //     // display_clear();
+      //     initY--;
+
+      //     toggle_pixel(64, initY, 1);
+      //     display_image2(0, screen);
+      //     delay(1000);
+      //     if (initY == 0) {
+      //       bool = 1;
+      //     }
+      //   }
       timeoutcount = 0;
     }
   }
@@ -63,17 +75,213 @@ void labinit(void) {
 }
 
 /* This function is called repetitively from the main program */
-void labwork(void) {  // game loop
-                      //   toggle_pixel(40, 3, 1);
-                      //   display_image2(0, screen);
 
-  toggle_pixel(64, 16, 1);
-  int initY = 16;
+// struct TestPlayer t2 = {
+//     0,
+//     0,
+// };
+// struct TestPlayer* getPlayert2() {
+//   return &t2;
+// };
 
-  while (initY < 33) {
-    initY++;
-    toggle_pixel(64, initY, 1);
-    display_clear();
+struct TestPlayer* player;
+
+struct Obstacle* obstacle1;
+struct Obstacle* obstacle2;
+struct Obstacle* obstacle3;
+
+void drawBird(struct TestPlayer* playerObj) {
+  int i;
+  int j;
+  for (i = 0; i < 6; i++) {
+    for (j = 0; j < 6; j++) {
+      toggle_pixel(playerObj->x + i, playerObj->y + j, 1);
+    }
   }
+}
+
+void birdLoop() {
+  player = getPlayerBird();
+  // initial positions
+  //   player->x = 32;
+  //   player->y = 16;
+
+  drawBird(player);
+  toggle_pixel(player->x, player->y, 1);
+  delay(1);
+  player->y++;
+  //   player->x++;
+
+  //   int bool = 1;
+  //   while (bool) {
+  //     // screen_clear(screen);
+  //     player->y++;
+  //     toggle_pixel(player->x, player->y, 1);
+  //     // display_image2(0, screen);
+  //     delay(1000);
+  //     if (player->y >= 33) {
+  //       bool = 0;
+  //     }
+  //   }
+}
+
+// draw the pipes separately: top and bottom
+
+// void drawPipeTop(int8_t width, int8_t height, struct Obstacle* pipeObj) {
+//   int i;
+//   int j;
+//   int t;
+//   for (t = 0; t < width; t++) {
+//     for (i = 0; i < height; i++) {
+//       toggle_pixel(pipeObj->x + t, i, 1);
+//       for (j = 0; j < height; j++) {
+//         toggle_pixel(pipeObj->x + t + 1, j, 1);
+//       }
+//     }
+//   }
+// }
+
+// void drawPipeBottom(int8_t width, int8_t height, struct Obstacle* pipeObj) {
+//   int i;
+//   int j;
+//   int t;
+//   for (t = 0; t < width; t++) {
+//     for (i = 0; i < height; i++) {
+//       toggle_pixel(pipeObj->x + t, pipeObj->y - i, 1);
+//       for (j = 0; j < height; j++) {
+//         toggle_pixel(pipeObj->x + t + 1, pipeObj->y - j, 1);
+//       }
+//     }
+//   }
+// }
+
+void drawPipe(int8_t width, int8_t height, struct Obstacle* pipeObj) {
+  int i;
+  int j;
+  int t;
+
+  if (!pipeObj->bool) {
+    for (t = 0; t < width; t++) {
+      for (i = 0; i < height; i++) {
+        toggle_pixel(pipeObj->x + t, i, 1);
+        for (j = 0; j < height; j++) {
+          toggle_pixel(pipeObj->x + t + 1, j, 1);
+        }
+      }
+    }
+
+  } else {
+    for (t = 0; t < width; t++) {
+      for (i = 0; i < height; i++) {
+        toggle_pixel(pipeObj->x + t, pipeObj->y - i, 1);
+        for (j = 0; j < height; j++) {
+          toggle_pixel(pipeObj->x + t + 1, pipeObj->y - j, 1);
+        }
+      }
+    }
+  }
+}
+
+void obstacleLoop() {
+  obstacle1 = getPipe1();  // top
+  drawPipe(6, 12, obstacle1);
+  obstacle2 = getPipe2();  // bottom
+  drawPipe(2, 12, obstacle2);
+  obstacle3 = getPipe3();  // bottom
+  drawPipe(3, 8, obstacle3);
+
+  delay(1);
+  //   int i;
+  //   int j;
+  //   for (i = 0; i < 12; i++) {
+  //     toggle_pixel(obstacle1->x, i, 1);
+  //     for (j = 0; j < 12; j++) {
+  //       toggle_pixel(obstacle1->x + 1, j, 1);
+  //     }
+  //   }
+
+  obstacle1->x--;
+  obstacle2->x--;
+  obstacle3->x--;
+}
+
+void reset() {
+  player->x = 32;
+  player->y = 16;
+}
+
+void detectCollision() {
+  if (player->y + 5 > 32 || player->y < 0) {  // top bottom walls
+    // display_string(0, "dead");
+    // display_update();
+  }
+
+  //   if ((player->x + 5 == obstacle1->x) || (player->y == obstacle1->y)) {
+  //     reset();
+  //     display_string(3, "dead");
+  //     display_update();
+  //   }
+
+  //   if ((player->x + 5 == obstacle2->x) || (player->y == obstacle2->y)) {
+  //     reset();
+  //     display_string(3, "dead");
+  //     display_update();
+  //   }
+}
+
+void obstacleCollision(int bool) {
+  if (bool) {
+    display_string(0, "KTH/ICT lab");
+  }
+}
+
+void renderAll() {
+  int sw = getsw();
+  if (sw & 0b1) {
+    player->x = 32;
+    player->y = 16;
+    main();
+  }
+  int btns = getbtns();
+
+  if (btns & 0b1) {
+    player->y -= 3;
+  }
+  if (btns & 0b10) {
+    player->x += 1;
+  }
+  if (btns & 0b100) {
+    player->x -= 1;
+  }
+
+  screen_clear(screen);
+  detectCollision();
+  birdLoop();
+  obstacleLoop();
+
   display_image2(0, screen);
 }
+
+int lineSegment(int a, int b, int value) {
+  int min, max;
+
+  if (a < b) {
+    max = b;
+    min = a;
+  } else {
+    max = a;
+    min = b;
+  }
+
+  if ((value > min) && (value < max)) return 1;
+  if ((value == min) || (value == max)) return 1;
+  return 0;
+}
+
+void labwork(void) {  // game loop
+
+  renderAll();
+}
+
+// display_string(0, "KTH/ICT lab");
+//   display_string(1, "in Computer");

@@ -11,6 +11,7 @@
 #include <stdint.h>  /* Declarations of uint_32 and the like */
 
 #include "mipslab.h" /* Declatations for these labs */
+#include "structs.h"
 
 int main(void) {
   /*
@@ -70,7 +71,7 @@ int main(void) {
 
   display_clear();
 
-    while (1) {
+  while (1) {
     labwork(); /* Do lab-specific things again and again */
   }
   return 0;
