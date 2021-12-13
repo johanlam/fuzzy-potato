@@ -5,6 +5,6 @@
 
 #include "structs.h"
 
-struct TestPlayer* getPlayer();
+int gameStatus;
 
 #endif

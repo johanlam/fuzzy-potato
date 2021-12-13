@@ -10,6 +10,7 @@
 #include <pic32mx.h> /* Declarations of system-specific addresses etc */
 #include <stdint.h>  /* Declarations of uint_32 and the like */
 
+#include "gameObjects.h"
 #include "mipslab.h" /* Declatations for these labs */
 #include "structs.h"
 
@@ -59,10 +60,10 @@ int main(void) {
   SPI2CONSET = 0x8000;
 
   display_init();
-  display_string(0, "KTH/ICT lab");
-  display_string(1, "in Computer");
-  display_string(2, "Engineering");
-  display_string(3, "Welcome!");
+  display_string(0, "Loading game");
+  display_string(1, ".");
+  display_string(2, "..");
+  display_string(3, "...");
   display_update();
 
   //   display_image(96, icon);
@@ -71,7 +72,7 @@ int main(void) {
 
   display_clear();
 
-  while (1) {
+    while (1) {
     labwork(); /* Do lab-specific things again and again */
   }
   return 0;
