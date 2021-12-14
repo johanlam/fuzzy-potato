@@ -40,7 +40,7 @@
 	PUSH $s1 # s1 = ms
 
 	move $s1, $a0			
-	li $s1, 1000		# change argument value from $a0
+	li $s1, 13		# change argument value from $a0, default 1000, optimal 50
 	li $s0, 4711		# change i = 4711 variable in for loop
 	
 while: 	beqz $s1, done
@@ -55,6 +55,34 @@ for: 	beq $t0, $s0, while 	# if i = 4711, return to while
 	nop
 
 done: 
+	POP $s1
+	POP $s0
+	POP $ra
+	jr $ra
+	nop 
+
+    .global delay2
+	delay2:
+	PUSH $ra
+	PUSH $s0 # s0 = max i
+	PUSH $s1 # s1 = ms
+
+	move $s1, $a0			
+	li $s1, 700		# change argument value from $a0, default 1000, optimal 50
+	li $s0, 4711		# change i = 4711 variable in for loop
+	
+while2: 	beqz $s1, done2
+	nop
+	addi $s1, $s1, -1 
+	li $t0, 0 # t0 = i
+
+for2: 	beq $t0, $s0, while2	# if i = 4711, return to while
+	nop
+	addi $t0, $t0, 1
+	j for2
+	nop
+
+done2: 
 	POP $s1
 	POP $s0
 	POP $ra
@@ -126,6 +154,7 @@ sb $t0, 5($s0)
 j time2return
 nop 
 
+.global enable_interrupt
 enable_interrupt:
 ei
 jr $ra

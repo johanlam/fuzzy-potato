@@ -12,14 +12,19 @@ void display_image(int x, const uint8_t *data);
 void display_init(void);
 void display_string(int line, char *s);
 void display_update(void);
+void display_update2(const uint8_t *byteBuffer);
+void display_clear();
+void display_testing(int n);
 uint8_t spi_send_recv(uint8_t data);
+void toggle_pixel(int x, int y, int bool);
+void screen_clear(uint8_t *screen);
 
 /* Declare lab-related functions from mipslabfunc.c */
-char * itoaconv( int num );
+char *itoaconv(int num);
 void labwork(void);
-int nextprime( int inval );
+int nextprime(int inval);
 void quicksleep(int cyc);
-void tick( unsigned int * timep );
+void tick(unsigned int *timep);
 
 /* Declare display_debug - a function to help debugging.
 
@@ -33,14 +38,21 @@ void tick( unsigned int * timep );
    repeated calls to display_image; display_image overwrites
    about half of the digits shown by display_debug.
 */
-void display_debug( volatile int * const addr );
+void display_debug(volatile int *const addr);
 
 /* Declare bitmap array containing font */
-extern const uint8_t const font[128*8];
+extern const uint8_t const font[128 * 8];
 /* Declare bitmap array containing icon */
 extern const uint8_t const icon[128];
 /* Declare text buffer for display output */
 extern char textbuffer[4][16];
+
+// Declare screen frame
+extern uint8_t screen[512];
+// Declare next screen frame
+extern uint8_t nextScreen[512];
+// Declare bird
+extern const uint8_t const birdIcon[12];
 
 /* Declare functions written by students.
    Note: Since we declare these functions here,
@@ -48,7 +60,7 @@ extern char textbuffer[4][16];
    specified in the laboratory instructions. */
 /* Written as part of asm lab: delay, time2string */
 void delay(int);
-void time2string( char *, int );
+void time2string(char *, int);
 /* Written as part of i/o lab: getbtns, getsw, enable_interrupt */
 int getbtns(void);
 int getsw(void);
